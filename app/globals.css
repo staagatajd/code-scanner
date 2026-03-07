@@ -10,7 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-press-start: var(--font-press);
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -23,4 +25,17 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-flow 3s ease infinite;
+  filter: drop-shadow(0 0 8px rgba(139, 222, 218, 0.8)) 
+          drop-shadow(0 0 20px rgba(225, 125, 194, 0.5));
 }
