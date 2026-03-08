@@ -1,4 +1,28 @@
+"use client";
+
+import { useState } from "react";
+import { Finding } from "@/lib/scanner";
+import IssueCard from "./components/issueCard";
+
 export default function CodeScanner() {
+  const [code, setCode] = useState<string>("");
+  const [findings, setFindings] = useState<Finding[]>([]);
+
+  const handleCode = async () => {
+    if (code.trim() === "") {
+      return;
+    }
+
+    const res = await fetch("/api/scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
+
+    const { findings } = await res.json();
+    setFindings(findings);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#0f0c29] to-[#302b63] to-[#24243e]">
       <div className="flex justify-center p-5 flex-col items-center gap-10">
@@ -23,10 +47,40 @@ export default function CodeScanner() {
           </div>
 
           <textarea
-            className="h-64 w-[600px] bg-[#1a1a2e] text-[#8bdeda] font-mono text-sm p-4 rounded-lg border border-[#4a4080] outline-none resize-none code-input"
+            value={code}
+            className="h-64 w-[600px] bg-[#1a1a2e] text-[#8bdeda] font-mono text-sm p-4 rounded-lg border border-[#4a4080] border-4 outline-none resize-none code-input
+            overflow-y-auto scrollbar-thin 
+            scrollbar-thumb-zinc-700 
+            scrollbar-track-transparent 
+            [&::-webkit-scrollbar]:w-2
+            [&::-webkit-scrollbar-track]:bg-transparent
+            [&::-webkit-scrollbar-thumb]:bg-zinc-800
+            [&::-webkit-scrollbar-thumb]:rounded-full
+            hover:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
             placeholder="YOUR CODE..."
+            onChange={(e) => setCode(e.target.value)}
           />
-          
+
+          <button
+            onClick={handleCode}
+            disabled={code.trim() === ""}
+            className="mt-4 px-6 py-2 rounded-lg font-mono text-sm font-bold cursor-pointer
+            bg-gradient-to-r from-purple-500 to-cyan-500
+            hover:from-purple-400 hover:to-cyan-400
+            transition-all duration-300
+            shadow-[0_0_20px_rgba(167,139,250,0.4)]
+            hover:shadow-[0_0_30px_rgba(167,139,250,0.8)] transition-transform duration-150 hover:scale-105 active:scale-95
+            disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
+          >
+            SCAN
+          </button>
+        </div>
+
+        <div>
+          {findings.length > 0 &&
+            findings.map((finding, index) => (
+              <IssueCard {...finding} key={index} />
+            ))}
         </div>
       </div>
     </div>
