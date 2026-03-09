@@ -29,7 +29,7 @@ export default function CodeScanner() {
         {/* header */}
         <div className="flex justify-center flex-col items-center gap-1">
           <div
-            className="text-[60px] font-press-start bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent filter: drop-shadow"
+            className="text-[60px] font-press-start bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent filter: drop-shadow animate-gradient"
             style={{
               textShadow: "none",
               filter: "drop-shadow(0 0 20px rgba(167, 139, 250, 0.8))",
@@ -54,9 +54,10 @@ export default function CodeScanner() {
             scrollbar-track-transparent 
             [&::-webkit-scrollbar]:w-2
             [&::-webkit-scrollbar-track]:bg-transparent
-            [&::-webkit-scrollbar-thumb]:bg-zinc-800
+            [&::-webkit-scrollbar-thumb]:bg-zinc-500
             [&::-webkit-scrollbar-thumb]:rounded-full
-            hover:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
+            hover:[&::-webkit-scrollbar-thumb]:bg-zinc-700
+            shadow-[0_0_20px_rgba(167,139,250,0.15)]"
             placeholder="YOUR CODE..."
             onChange={(e) => setCode(e.target.value)}
           />
@@ -76,10 +77,10 @@ export default function CodeScanner() {
           </button>
         </div>
 
-        <div>
-          {findings.length > 0 &&
-            findings.map((finding, index) => (
-              <IssueCard {...finding} key={index} />
+        <div className="grid grid-cols-3 gap-4">
+            {findings.length > 0 &&
+              findings.map((finding, index) => (
+                <IssueCard {...finding} key={index} />
             ))}
         </div>
       </div>
