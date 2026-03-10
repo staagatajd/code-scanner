@@ -78,10 +78,14 @@ export default function CodeScanner() {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-            {findings.length > 0 &&
+            {findings.length > 0 && code.trim() !== "" ?
               findings.map((finding, index) => (
                 <IssueCard {...finding} key={index} />
-            ))}
+            )) : 
+            <div>
+              No Issues found 
+            </div>
+            }
         </div>
       </div>
     </div>
