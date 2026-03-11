@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Finding } from "@/lib/scanner";
 import IssueCard from "./components/issueCard";
 
 export default function CodeScanner() {
   const [code, setCode] = useState<string>("");
   const [findings, setFindings] = useState<Finding[]>([]);
+  const [hasScanned, setHasScanned] = useState<boolean>(false);
 
   const handleCode = async () => {
     if (code.trim() === "") {
       return;
     }
+
+    setHasScanned(true);
 
     const res = await fetch("/api/scan", {
       method: "POST",
@@ -22,6 +26,13 @@ export default function CodeScanner() {
     const { findings } = await res.json();
     setFindings(findings);
   };
+
+  useEffect(() => {
+    if(code.trim() === "")
+    {
+      setHasScanned(false);
+    }
+  }, [code]);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#0f0c29] to-[#302b63] to-[#24243e]">
@@ -78,14 +89,25 @@ export default function CodeScanner() {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-            {findings.length > 0 && code.trim() !== "" ?
-              findings.map((finding, index) => (
-                <IssueCard {...finding} key={index} />
-            )) : 
-            <div>
-              No Issues found 
+          {findings.length > 0 && hasScanned ? (
+            findings.map((finding, index) => (
+              <IssueCard {...finding} key={index} />
+            ))
+          ) : hasScanned ? (
+            <div className="col-span-3 flex flex-col justify-center items-center">
+              <div className="flex items-center justify center gap-3">
+                <div>
+                  <ShieldCheck size={20} className="text-emerald-400 " />
+                </div>
+                <span className="text-gray-400"> No Issues Found </span>
+              </div>
+
+              <div className="text-gray-500 font-mono text-sm">
+                Code passed all OWASP security checks
+              </div>
+
             </div>
-            }
+          ) : null}
         </div>
       </div>
     </div>
