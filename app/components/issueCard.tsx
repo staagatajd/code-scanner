@@ -9,7 +9,7 @@ export default function IssueCard({
 }: Finding) {
   return (
     <div
-      className="relative flex flex-col gap-3 p-4 w-72 rounded-xl border border-[#4a4080]
+      className="relative flex flex-col gap-3 p-4 w-72 h-55 rounded-xl border border-[#4a4080]
     bg-[#1a1a2e] shadow-[0_0_20px_rgba(167,139,250,0.15)]
     hover:shadow-[0_0_30px_rgba(167,139,250,0.35)] transition-all duration-300 hover:scale-102"
     >
@@ -46,7 +46,7 @@ export default function IssueCard({
         [&::-webkit-scrollbar-track]:bg-transparent
         [&::-webkit-scrollbar-thumb]:bg-purple-500/40
         [&::-webkit-scrollbar-thumb]:rounded-full
-        hover:[&::-webkit-scrollbar-thumb]:bg-purple-400/70"
+        hover:[&::-webkit-scrollbar-thumb]:bg-purple-400/70 flex-1"
       >
         {snippet}
       </div>
