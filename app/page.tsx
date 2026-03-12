@@ -4,6 +4,7 @@ import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Finding } from "@/lib/scanner";
 import IssueCard from "./components/issueCard";
+import AIPanel from "./components/aiPanel";
 
 export default function CodeScanner() {
   const [code, setCode] = useState<string>("");
@@ -188,9 +189,15 @@ export default function CodeScanner() {
           ): null}
         </div>
 
-        <div>
-          AI THOUGHTS
-        </div>
+        {analysis !== "" && hasScanned && (
+          <div  className="mt-10 flex flex-col items-center">
+            <div className="text-[45px] font-mono tracking-wider text-purple-400">
+              AI ANALYSIS
+            </div>
+            <AIPanel analysis={analysis} findings = {findings}/>
+          </div>
+          
+        )}
       </div>
     </div>
   );
