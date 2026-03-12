@@ -1,10 +1,60 @@
-"use Client";
-import { useState } from "react";
-import { SendHorizonal } from "lucide-react";
+"use client";
+import { Finding } from "@/lib/scanner";
+import { useState, useEffect, useRef} from "react";
+import Spinner from "./spinnerIcon";
+import ReactMarkdown from "react-markdown";
 
-export default function ChatBox() {
+type Message = {
+  role: "user" | "ai";
+  content: string;
+};
+
+type ChatBoxProps = {
+  findings: Finding[];
+}; 
+
+export default function ChatBox({findings}: ChatBoxProps) {
   const [userMessage, setUserMessage] = useState<string>("");
-  const [messageHistory, setMessageHistory] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth"});
+  }, [messages])
+
+  const handleSend = async () =>
+  {
+    try
+    {
+        if(userMessage.trim() === "" || loading)
+      {
+        return;
+      }
+      
+      const newMessages: Message[] = [...messages, {role: "user", content: userMessage },];
+
+      setMessages(newMessages);
+      setUserMessage("");
+      setLoading(true);
+
+      const res = await fetch("/api/chat",{
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: userMessage, history: messages, findings: findings}),
+      });
+
+      const data = await res.json();
+      setMessages([...newMessages, {role: "ai", content: data.response}]);
+      setLoading(false);
+    }
+    catch(error)
+    {
+      console.error(error);
+    }
+    
+  } 
 
   return (
     //chat box
@@ -19,7 +69,19 @@ export default function ChatBox() {
             [&::-webkit-scrollbar-thumb]:rounded-full
             hover:[&::-webkit-scrollbar-thumb]:bg-zinc-700 p-3"
       >
-        <div>chat here</div>
+        {messages.map((chat, index) => (
+          <div key = {index} className={`mb-3 flex ${chat.role === "user" ? "justify-end" : "justify-start"}`}>
+            <span className={`px-3 py-2 rounded-xl text-sm font-mono max-w-[75%] ${chat.role === "user" ? "bg-purple-600 text-white" : "bg-[#0f0c29] text-[#8bdeda] border border-[#4a4080]" }`}>
+              <ReactMarkdown>{chat.content}</ReactMarkdown>
+            </span>
+          </div>
+        ))}
+
+        {loading && (
+        <div>
+          <Spinner/>
+        </div>)}
+        <div ref={bottomRef} />
       </div>
 
       <div className="flex gap-2 p-4">
@@ -33,6 +95,9 @@ export default function ChatBox() {
           <input
             placeholder="Ask AI here..."
             className="flex-1 bg-transparent text-[#8bdeda] text-sm font-mono outline-none placeholder:text-gray-600"
+            value={userMessage}
+            onChange={(e) => {setUserMessage(e.target.value)}}
+            onKeyDown={(e) => {e.key === "Enter" && handleSend()}}
           />
 
           <button
@@ -40,11 +105,13 @@ export default function ChatBox() {
             bg-gradient-to-r from-purple-500 to-cyan-500
             hover:from-purple-400 hover:to-cyan-400
             transition-all duration-200 hover:scale-105 active:scale-95"
+            onClick={handleSend}
+            disabled = {loading}
             >
             SEND
            </button>
         </div>
-      </div>
+      </div>  
     </div>
   );
 }

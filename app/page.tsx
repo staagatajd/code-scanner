@@ -1,11 +1,12 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, LoaderCircle, Zap  } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Finding } from "@/lib/scanner";
 import IssueCard from "./components/issueCard";
 import AIPanel from "./components/aiPanel";
 import ChatBox from "./components/aiChatBox";
+import Spinner from "./components/spinnerIcon";
 
 export default function CodeScanner() {
   const [code, setCode] = useState<string>("");
@@ -18,6 +19,8 @@ export default function CodeScanner() {
   const totalPages = Math.ceil(findings.length / findingsPerPage);
   const start = (currentPage - 1) * findingsPerPage;
   const currentFindings = findings.slice(start, start + findingsPerPage);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCode = async () => {
     if (code.trim() === "") {
@@ -38,14 +41,21 @@ export default function CodeScanner() {
   };
 
   const handleAnalyze = async () => {
-    const res = await fetch("/api/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ findings }),
-    });
-
-    const { analysis } = await res.json();
-    setAnalysis(analysis);
+    try {
+      setLoading(true);
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ findings }),
+      });
+      const { analysis } = await res.json();
+      setAnalysis(analysis);
+    } catch (error: any) {
+      console.error(error);
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -117,25 +127,32 @@ export default function CodeScanner() {
             hover:from-purple-400 hover:to-cyan-400
             shadow-[0_0_20px_rgba(167,139,250,0.4)]
             hover:shadow-[0_0_30px_rgba(167,139,250,0.8)] 
-            transition-all duration-300 hover:scale-105 active:scale-95"
+            transition-all duration-300 hover:scale-105 active:scale-95 w-45 h-10.5 overflow-hidden"
             >
-              ANALYZE WITH AI
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Spinner />
+                  <span>ANALYZING</span>
+                </div>
+              ) : (
+                "ANALYZE WITH AI"
+              )}
             </button>
             <div className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
               {/* Gemini SVG Icon */}
-              <svg
+              {/* <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-3 h-3 fill-cyan-400 animate-pulse"
               >
                 <path d="M12 2L14.7 8.3L21 11L14.7 13.7L12 20L9.3 13.7L3 11L9.3 8.3L12 2Z" />
-              </svg>
-
+              </svg> */}
+              <Zap className="w-3 h-3 text-purple-400" />
               <p className="text-[10px] font-mono tracking-wider">
                 Powered by{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-                  GEMINI
+                  GROQ
                 </span>
               </p>
             </div>
@@ -193,15 +210,15 @@ export default function CodeScanner() {
         {analysis !== "" && hasScanned && (
           <div className="mt-10 flex flex-col items-center">
             <div className="text-[45px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-  <span className="text-purple-500/50">[</span>
-  GEMINI ANALYSIS
-  <span className="text-purple-500/50">]</span>
-</div>
+              <span className="text-purple-500/50">[</span>
+              GROQ ANALYSIS
+              <span className="text-purple-500/50">]</span>
+            </div>
             <AIPanel analysis={analysis} findings={findings} />
 
             <div className="text-[45px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 flex items-center gap-3">
-              CHAT WITH GEMINI
-              <svg
+              CHAT WITH GROQ
+              {/* <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -209,10 +226,11 @@ export default function CodeScanner() {
                 style={{ animation: "spin 6s linear infinite" }}
               >
                 <path d="M12 2L14.7 8.3L21 11L14.7 13.7L12 20L9.3 13.7L3 11L9.3 8.3L12 2Z" />
-              </svg>
+              </svg> */}
+              <Zap className="w-17 h-17 fill-cyan-400 animate-pulse animate-spin" style={{ animation: "spin 6s linear infinite" }} />
             </div>
 
-            <ChatBox/>
+            <ChatBox findings={findings}/>
           </div>
         )}
       </div>
