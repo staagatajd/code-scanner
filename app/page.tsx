@@ -65,7 +65,7 @@ export default function CodeScanner() {
               filter: "drop-shadow(0 0 20px rgba(167, 139, 250, 0.8))",
             }}
           >
-            Static Code Analyzer
+            [Static Code Analyzer]
           </div>
           <div className="text-[13px] font-mono">by JD Sta. Agata</div>
         </div>
@@ -186,17 +186,31 @@ export default function CodeScanner() {
                 NEXT →
               </button>
             </div>
-          ): null}
+          ) : null}
         </div>
 
         {analysis !== "" && hasScanned && (
-          <div  className="mt-10 flex flex-col items-center">
-            <div className="text-[45px] font-mono tracking-wider text-purple-400">
-              AI ANALYSIS
+          <div className="mt-10 flex flex-col items-center">
+            <div className="text-[45px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+  <span className="text-purple-500/50">[</span>
+  GEMINI ANALYSIS
+  <span className="text-purple-500/50">]</span>
+</div>
+            <AIPanel analysis={analysis} findings={findings} />
+
+            <div className="text-[45px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 flex items-center gap-3">
+              CHAT WITH GEMINI
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-17 h-17 fill-cyan-400 animate-pulse animate-spin"
+                style={{ animation: "spin 6s linear infinite" }}
+              >
+                <path d="M12 2L14.7 8.3L21 11L14.7 13.7L12 20L9.3 13.7L3 11L9.3 8.3L12 2Z" />
+              </svg>
             </div>
-            <AIPanel analysis={analysis} findings = {findings}/>
           </div>
-          
         )}
       </div>
     </div>

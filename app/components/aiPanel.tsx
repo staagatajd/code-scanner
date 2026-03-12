@@ -20,7 +20,7 @@ export default function AIPanel({ analysis, findings }: AIPanelProps) {
             [&::-webkit-scrollbar-thumb]:bg-zinc-500
             [&::-webkit-scrollbar-thumb]:rounded-full
             hover:[&::-webkit-scrollbar-thumb]:bg-zinc-700
-            shadow-[0_0_20px_rgba(167,139,250,0.15)]"
+            shadow-[0_0_20px_rgba(167,139,250,0.15)] mb-8"
     >
       <div className="prose prose-invert max-w-none">
         <ReactMarkdown
