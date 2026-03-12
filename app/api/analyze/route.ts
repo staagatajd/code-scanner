@@ -1,13 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
-
 import { NextRequest, NextResponse } from "next/server";
 
-
-
 const apiKey = process.env.GEMINI_API_KEY as string;
-
-
-
 const ai = new GoogleGenAI({apiKey});
 
 

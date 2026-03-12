@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Finding } from "@/lib/scanner";
 import IssueCard from "./components/issueCard";
 import AIPanel from "./components/aiPanel";
+import ChatBox from "./components/aiChatBox";
 
 export default function CodeScanner() {
   const [code, setCode] = useState<string>("");
@@ -210,6 +211,8 @@ export default function CodeScanner() {
                 <path d="M12 2L14.7 8.3L21 11L14.7 13.7L12 20L9.3 13.7L3 11L9.3 8.3L12 2Z" />
               </svg>
             </div>
+
+            <ChatBox/>
           </div>
         )}
       </div>
