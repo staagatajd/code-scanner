@@ -7,10 +7,11 @@ import IssueCard from "./components/issueCard";
 import AIPanel from "./components/aiPanel";
 import ChatBox from "./components/aiChatBox";
 import Spinner from "./components/spinnerIcon";
+import { useScanStore } from "@/store/useScanStore";
 
 export default function CodeScanner() {
   const [code, setCode] = useState<string>("");
-  const [findings, setFindings] = useState<Finding[]>([]);
+  const {findings, setFindings} = useScanStore(); 
   const [hasScanned, setHasScanned] = useState<boolean>(false);
   const [analysis, setAnalysis] = useState<string>("");
 
