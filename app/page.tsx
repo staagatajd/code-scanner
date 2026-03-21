@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck, LoaderCircle, Zap  } from "lucide-react";
+import { ShieldCheck, LoaderCircle, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Finding } from "@/lib/scanner";
 import IssueCard from "./components/issueCard";
@@ -8,12 +8,19 @@ import AIPanel from "./components/aiPanel";
 import ChatBox from "./components/aiChatBox";
 import Spinner from "./components/spinnerIcon";
 import { useScanStore } from "@/store/useScanStore";
+import Link from "next/link";
 
 export default function CodeScanner() {
-  const [code, setCode] = useState<string>("");
-  const {findings, setFindings} = useScanStore(); 
-  const [hasScanned, setHasScanned] = useState<boolean>(false);
-  const [analysis, setAnalysis] = useState<string>("");
+  const {
+    findings,
+    setFindings,
+    hasScanned,
+    setHasScanned,
+    analysis,
+    setAnalysis,
+    code,
+    setCode,
+  } = useScanStore();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const findingsPerPage = 6;
@@ -60,7 +67,7 @@ export default function CodeScanner() {
   };
 
   useEffect(() => {
-    if (code.trim() === "") {
+    if (code.trim() === "" && findings.length === 0) {
       setHasScanned(false);
     }
   }, [code]);
@@ -139,6 +146,7 @@ export default function CodeScanner() {
                 "ANALYZE WITH AI"
               )}
             </button>
+
             <div className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
               {/* Gemini SVG Icon */}
               {/* <svg
@@ -158,6 +166,21 @@ export default function CodeScanner() {
               </p>
             </div>
           </div>
+        )}
+
+        {findings.length > 0 && hasScanned && (
+          <Link href="/dashboard">
+            <button
+              className="px-6 py-2 rounded-lg font-mono text-sm font-bold cursor-pointer
+            bg-gradient-to-r from-purple-500 to-cyan-500
+            hover:from-purple-400 hover:to-cyan-400
+            shadow-[0_0_20px_rgba(167,139,250,0.4)]
+            hover:shadow-[0_0_30px_rgba(167,139,250,0.8)] 
+            transition-all duration-300 hover:scale-105 active:scale-95 w-45 h-10.5 overflow-hidden"
+            >
+              VIEW DASHBOARD
+            </button>
+          </Link>
         )}
 
         <div className="flex flex-col items-center gap-4 h-[650px] justify-between">
@@ -228,10 +251,13 @@ export default function CodeScanner() {
               >
                 <path d="M12 2L14.7 8.3L21 11L14.7 13.7L12 20L9.3 13.7L3 11L9.3 8.3L12 2Z" />
               </svg> */}
-              <Zap className="w-17 h-17 fill-cyan-400 animate-pulse animate-spin" style={{ animation: "spin 6s linear infinite" }} />
+              <Zap
+                className="w-17 h-17 fill-cyan-400 animate-pulse animate-spin"
+                style={{ animation: "spin 6s linear infinite" }}
+              />
             </div>
 
-            <ChatBox findings={findings}/>
+            <ChatBox findings={findings} />
           </div>
         )}
       </div>
