@@ -66,6 +66,27 @@ export default function CodeScanner() {
     }
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => 
+  {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement>) => 
+  {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if(!file)
+      return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) =>
+    {
+      const text = event.target?.result as string;
+      setCode(text);
+    };
+    reader.readAsText(file);
+  };
+
   useEffect(() => {
     if (code.trim() === "" && findings.length === 0) {
       setHasScanned(false);
@@ -92,7 +113,7 @@ export default function CodeScanner() {
         {/* input area */}
         <div className="flex items-center justify-center flex-col mb-4">
           <div className="font-mono text-sm font-bold bg-gradient-to-r from-[#8bdeda] to-[#43add0] to-[#998ee0] to-[#e17dc2] to-[#ef9393] bg-clip-text text-transparent animate-gradient">
-            Paste your code here
+            Paste code | Drag file 
           </div>
 
           <textarea
@@ -109,6 +130,8 @@ export default function CodeScanner() {
             shadow-[0_0_20px_rgba(167,139,250,0.15)]"
             placeholder="YOUR CODE..."
             onChange={(e) => setCode(e.target.value)}
+            onDragOver={handleDragOver}
+            onDrop = {handleDrop}
           />
 
           <button
