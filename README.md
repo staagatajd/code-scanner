@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Static Code Analyzer
 
-## Getting Started
+A static code analysis tool that scans source code for security vulnerabilities without executing it, mapped to the OWASP Top 10 2025.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Regex-based static analysis across 20+ vulnerability rules
+- OWASP Top 10 2025 coverage (SQLi, XSS, command injection, hardcoded secrets, and more)
+- AI-powered analysis and chat via Groq (llama-3.3-70b-versatile)
+- Severity dashboard with visual breakdown
+- Drag and drop file upload
+- Export findings as PDF or JSON
+- Persistent state across navigation via Zustand
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js + TypeScript
+- Tailwind CSS
+- Zustand (state management)
+- Groq API
+- jsPDF
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Disclaimer
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> This is a learning project built to explore static analysis concepts and common web vulnerabilities. It is not a replacement for production security tools like Snyk or SonarQube. Regex-based analysis has known limitations — it cannot understand code context and may produce false positives.

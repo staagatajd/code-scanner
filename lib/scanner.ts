@@ -94,6 +94,49 @@ const rules: Rule[] = [
     message: "Directory listing may be enabled",
     pattern: /autoIndex\s*:\s*true/gi,
   },
+  {
+    ruleId: "path-traversal",
+    severity: "high",
+    message: "Possible path traversal vulnerability",
+    pattern: /\.\.\/|\.\.\\|\.\.\%2f/gi,
+  },
+  {
+    ruleId: "open-redirect",
+    severity: "medium",
+    message: "Possible open redirect vulnerability",
+    pattern: /res\.redirect\s*\(.*req\.|response\.redirect\s*\(.*request\./gi,
+  },
+  {
+    ruleId: "xxe-injection",
+    severity: "high",
+    message: "Possible XXE injection vulnerability",
+    pattern: /loadXML\s*\(|parseFromString\s*\(.*text\/xml/gi,
+  },
+  {
+    ruleId: "insecure-deserialization",
+    severity: "high",
+    message: "Possible insecure deserialization",
+    pattern: /deserialize\s*\(|unserialize\s*\(|pickle\.loads\s*\(/gi,
+  },
+  {
+    ruleId: "sensitive-data-log",
+    severity: "medium",
+    message: "Sensitive data may be logged",
+    pattern:
+      /console\.log\s*\(.*password|console\.log\s*\(.*token|console\.log\s*\(.*secret/gi,
+  },
+  {
+    ruleId: "cors-wildcard",
+    severity: "medium",
+    message: "CORS wildcard origin detected",
+    pattern: /Access-Control-Allow-Origin\s*:\s*\*/gi,
+  },
+  {
+    ruleId: "nosql-injection",
+    severity: "high",
+    message: "Possible NoSQL injection vulnerability",
+    pattern: /\$where\s*:|\.find\s*\(\s*\{.*\$gt|\.find\s*\(\s*\{.*\$ne/gi,
+  },
 ];
 
 export function scanCode(code: string): Finding[] {
